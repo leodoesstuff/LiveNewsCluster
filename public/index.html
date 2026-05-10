@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>LiveNewsCluster — Intelligence Dashboard</title>
+  <link rel="stylesheet" href="/css/style.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+</head>
+<body>
+
+<!-- TOP BAR -->
+<header class="topbar">
+  <div class="topbar-left">
+    <div class="logo">
+      <span class="logo-icon">⬡</span>
+      <span class="logo-text">LiveNews<strong>Cluster</strong></span>
+    </div>
+    <div class="status-bar">
+      <span class="status-dot" id="statusDot"></span>
+      <span id="statusText">Connecting...</span>
+    </div>
+  </div>
+  <div class="topbar-center">
+    <div class="search-wrap">
+      <span class="search-icon">🔍</span>
+      <input type="text" id="searchInput" placeholder="Search stories, topics, sources..." autocomplete="off" />
+      <button class="search-clear" id="searchClear" title="Clear">✕</button>
+    </div>
+  </div>
+  <div class="topbar-right">
+    <div class="meta-stats">
+      <div class="stat"><span class="stat-val" id="articleCount">—</span><span class="stat-lbl">Articles</span></div>
+      <div class="stat"><span class="stat-val" id="clusterCount">—</span><span class="stat-lbl">Clusters</span></div>
+      <div class="stat"><span class="stat-val" id="sourceCount">—</span><span class="stat-lbl">Sources</span></div>
+    </div>
+    <div class="last-updated">Updated: <span id="lastUpdated">—</span></div>
+    <button class="btn-refresh" id="refreshBtn" title="Refresh Now">
+      <span class="refresh-icon" id="refreshIcon">↻</span> Refresh
+    </button>
+  </div>
+</header>
+
+<div class="app-layout">
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <nav class="sidebar-nav">
+      <div class="nav-section-label">TOPICS</div>
+      <ul class="topic-list" id="topicList">
+        <li class="topic-item active" data-topic="All">
+          <span class="topic-icon">🌐</span>
+          <span class="topic-name">All News</span>
+          <span class="topic-badge" id="badge-All"></span>
+        </li>
+        <li class="topic-item" data-topic="World">
+          <span class="topic-icon">🗺️</span>
+          <span class="topic-name">World</span>
+          <span class="topic-badge" id="badge-World"></span>
+        </li>
+        <li class="topic-item" data-topic="U.S.">
+          <span class="topic-icon">🇺🇸</span>
+          <span class="topic-name">U.S.</span>
+          <span class="topic-badge" id="badge-US"></span>
+        </li>
+        <li class="topic-item" data-topic="Politics">
+          <span class="topic-icon">🏛️</span>
+          <span class="topic-name">Politics</span>
+          <span class="topic-badge" id="badge-Politics"></span>
+        </li>
+        <li class="topic-item" data-topic="Tech">
+          <span class="topic-icon">💻</span>
+          <span class="topic-name">Tech</span>
+          <span class="topic-badge" id="badge-Tech"></span>
+        </li>
+        <li class="topic-item" data-topic="Business">
+          <span class="topic-icon">📈</span>
+          <span class="topic-name">Business</span>
+          <span class="topic-badge" id="badge-Business"></span>
+        </li>
+        <li class="topic-item" data-topic="Sports">
+          <span class="topic-icon">⚽</span>
+          <span class="topic-name">Sports</span>
+          <span class="topic-badge" id="badge-Sports"></span>
+        </li>
+        <li class="topic-item" data-topic="Science">
+          <span class="topic-icon">🔬</span>
+          <span class="topic-name">Science</span>
+          <span class="topic-badge" id="badge-Science"></span>
+        </li>
+        <li class="topic-item" data-topic="Entertainment">
+          <span class="topic-icon">🎬</span>
+          <span class="topic-name">Entertainment</span>
+          <span class="topic-badge" id="badge-Entertainment"></span>
+        </li>
+        <li class="topic-item" data-topic="Health">
+          <span class="topic-icon">🏥</span>
+          <span class="topic-name">Health</span>
+          <span class="topic-badge" id="badge-Health"></span>
+        </li>
+        <li class="topic-item" data-topic="General">
+          <span class="topic-icon">📰</span>
+          <span class="topic-name">General</span>
+          <span class="topic-badge" id="badge-General"></span>
+        </li>
+      </ul>
+
+      <div class="nav-section-label" style="margin-top:24px">TRENDING</div>
+      <div class="trending-list" id="trendingList">
+        <div class="trending-loading">Loading trending...</div>
+      </div>
+    </nav>
+  </aside>
+
+  <!-- MAIN CONTENT -->
+  <main class="main-content">
+
+    <!-- FILTER BAR -->
+    <div class="filter-bar">
+      <div class="filter-group">
+        <label class="filter-label">Topic</label>
+        <div class="topic-pills" id="topicPills">
+          <button class="pill active" data-topic="All">All</button>
+          <button class="pill" data-topic="World">🗺️ World</button>
+          <button class="pill" data-topic="U.S.">🇺🇸 U.S.</button>
+          <button class="pill" data-topic="Politics">🏛️ Politics</button>
+          <button class="pill" data-topic="Tech">💻 Tech</button>
+          <button class="pill" data-topic="Business">📈 Business</button>
+          <button class="pill" data-topic="Sports">⚽ Sports</button>
+          <button class="pill" data-topic="Science">🔬 Science</button>
+          <button class="pill" data-topic="Entertainment">🎬 Entertainment</button>
+          <button class="pill" data-topic="Health">🏥 Health</button>
+        </div>
+      </div>
+      <div class="filter-group filter-group-right">
+        <label class="filter-label">Source</label>
+        <select id="sourceFilter" class="filter-select">
+          <option value="All">All Sources</option>
+        </select>
+        <label class="filter-label">Time</label>
+        <select id="timeFilter" class="filter-select">
+          <option value="all">All Time</option>
+          <option value="1h">Last Hour</option>
+          <option value="6h">Last 6 Hours</option>
+          <option value="24h">Last 24 Hours</option>
+          <option value="7d">Last 7 Days</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- ACTIVE FILTER DISPLAY -->
+    <div class="active-filters" id="activeFilters" style="display:none">
+      <span class="active-filter-label">Filtering by:</span>
+      <div class="active-filter-tags" id="activeFilterTags"></div>
+      <button class="clear-filters" id="clearFilters">Clear All</button>
+    </div>
+
+    <!-- FEED -->
+    <div class="feed" id="feed">
+      <div class="feed-loading" id="feedLoading">
+        <div class="spinner"></div>
+        <p>Fetching live news from all sources...</p>
+      </div>
+      <div class="feed-empty" id="feedEmpty" style="display:none">
+        <div class="empty-icon">📭</div>
+        <h3>No stories found</h3>
+        <p>Try adjusting your filters or search query.</p>
+        <button class="btn-refresh" onclick="clearAllFilters()">Clear Filters</button>
+      </div>
+      <div class="clusters-grid" id="clustersGrid"></div>
+    </div>
+
+    <!-- LOAD MORE -->
+    <div class="load-more-wrap" id="loadMoreWrap" style="display:none">
+      <button class="btn-load-more" id="loadMoreBtn">Load More Stories</button>
+    </div>
+
+  </main>
+</div>
+
+<!-- ARTICLE MODAL -->
+<div class="modal-overlay" id="modalOverlay" style="display:none">
+  <div class="modal" id="modal">
+    <div class="modal-header">
+      <div class="modal-meta">
+        <span class="modal-category" id="modalCategory"></span>
+        <span class="modal-breaking" id="modalBreaking" style="display:none">🔴 BREAKING</span>
+      </div>
+      <button class="modal-close" id="modalClose">✕</button>
+    </div>
+    <h2 class="modal-headline" id="modalHeadline"></h2>
+    <p class="modal-summary" id="modalSummary"></p>
+    <div class="modal-sources" id="modalSources"></div>
+    <div class="modal-articles" id="modalArticles"></div>
+  </div>
+</div>
+
+<script src="/js/app.js"></script>
+</body>
+</html>
