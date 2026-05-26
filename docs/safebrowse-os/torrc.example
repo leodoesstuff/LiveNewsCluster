@@ -1,0 +1,24 @@
+# Tor daemon for transparent proxy mode
+RunAsDaemon 0
+Log notice stdout
+
+User debian-tor
+DataDirectory /var/lib/tor
+
+# Transparent proxy listeners
+TransPort 127.0.0.1:9040
+DNSPort 127.0.0.1:5353
+AutomapHostsOnResolve 1
+VirtualAddrNetworkIPv4 10.192.0.0/10
+
+# Basic hardening
+ClientOnly 1
+SafeSocks 1
+TestSocks 1
+
+# Optional control (localhost only)
+ControlPort 127.0.0.1:9051
+CookieAuthentication 1
+
+# Reduce protocol metadata noise (optional tuning)
+ClientUseIPv6 1

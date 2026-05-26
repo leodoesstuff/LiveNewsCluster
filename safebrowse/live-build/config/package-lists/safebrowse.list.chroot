@@ -1,0 +1,13 @@
+live-boot
+systemd-sysv
+nftables
+tor
+torbrowser-launcher
+xorg
+openbox
+xinit
+x11-xserver-utils
+x11-utils
+xterm
+curl
+cryptsetup
