@@ -1,15 +1,7 @@
 #!/usr/bin/env bash
 set -euo pipefail
-
 xset s off
 xset -dpms
 xset s noblank
-
-# Minimal WM for kiosk mode
 openbox &
-
-# Block until network controls are up, then launch browser
-until /usr/local/bin/safebrowse-launch; do
-  xmessage -center "Waiting for Tor + firewall. Retrying in 5s..." || true
-  sleep 5
-done
+until /usr/local/bin/safebrowse-launch; do sleep 5; done

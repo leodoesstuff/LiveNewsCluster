@@ -1,7 +1,5 @@
 #!/usr/bin/env bash
 set -euo pipefail
-
-systemctl is-active --quiet tor || { echo "Tor inactive"; exit 1; }
-systemctl is-active --quiet nftables || { echo "nftables inactive"; exit 1; }
-
+systemctl is-active --quiet tor || exit 1
+systemctl is-active --quiet nftables || exit 1
 exec torbrowser-launcher

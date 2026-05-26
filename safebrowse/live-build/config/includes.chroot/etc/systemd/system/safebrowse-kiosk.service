@@ -2,7 +2,6 @@
 Description=SafeBrowse Kiosk Launcher
 After=network-online.target tor.service nftables.service systemd-user-sessions.service getty@tty1.service
 Wants=tor.service nftables.service
-
 [Service]
 Type=simple
 User=user
@@ -11,13 +10,9 @@ WorkingDirectory=/home/user
 Environment=HOME=/home/user
 Environment=XDG_RUNTIME_DIR=/run/user/1000
 TTYPath=/dev/tty1
-TTYReset=yes
-TTYVHangup=yes
-TTYVTDisallocate=yes
 StandardInput=tty
 ExecStart=/usr/bin/startx /usr/local/bin/safebrowse-session -- :0 vt1 -nocursor
 Restart=always
 RestartSec=5
-
 [Install]
 WantedBy=multi-user.target
