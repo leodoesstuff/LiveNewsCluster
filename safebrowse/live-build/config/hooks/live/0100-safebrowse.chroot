@@ -1,0 +1,17 @@
+#!/usr/bin/env bash
+set -e
+
+# Create kiosk user (UID 1000 for predictable runtime dir)
+id -u user >/dev/null 2>&1 || useradd -m -u 1000 -s /bin/bash user
+
+# Ensure services enabled
+systemctl enable tor
+systemctl enable nftables
+systemctl enable safebrowse-kiosk.service
+
+# Update nftables TOR UID dynamically for target image
+TOR_UID="$(id -u debian-tor)"
+sed -i "s/^define TOR_UID = .*/define TOR_UID = ${TOR_UID}/" /etc/nftables.conf
+
+# Disable swap by default for amnesic behavior
+swapoff -a || true
